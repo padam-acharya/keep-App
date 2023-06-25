@@ -8,14 +8,30 @@ function App() {
 
   const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || [])
   const [edit, setEdit] = useState(null)
+  const [editId, setEditId] = useState(null)
 
   function add(note) {
-    setNotes((prevState) => {
-      return [
-        ...prevState,
-        note
-      ]
-    })
+    if (editId) {
+
+      const updatedNotes = notes.map(item => {
+        if (note.id === item.id) {
+          console.log(note.content, item.title)
+          return { ...item, title: note.title, content: note.content }
+        }
+        return item
+      })
+      setNotes(updatedNotes)
+      setEdit(null)
+      setEditId(null)
+    }
+    else {
+      setNotes((prevState) => {
+        return [
+          ...prevState,
+          note
+        ]
+      })
+    }
   }
 
   function deleteNote(id) {
@@ -27,6 +43,8 @@ function App() {
     const editableNote = notes.find(note => note.id === id)
 
     setEdit(editableNote)
+    setEditId(editableNote.id)
+    console.log(editableNote.id)
   }
 
   useEffect(() => {

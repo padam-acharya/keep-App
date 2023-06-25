@@ -8,6 +8,15 @@ export default function TextArea({ addNote, edit: editNote }) {
 
     function handleChange(e) {
         const { name, value } = e.target
+        if (editNote) {
+            setNote(prevState => {
+                return {
+                    ...prevState,
+                    [name]: value
+                }
+            })
+            return
+        }
         setNote((prevState) => {
             return {
                 ...prevState,
